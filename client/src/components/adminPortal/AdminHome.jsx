@@ -25,8 +25,10 @@ export default function AdminHome() {
   const { register, handleSubmit, errors } = useForm();
   const onSubmit = async (formData) => {
     console.log(formData);
-
-    Axios.post(`http://localhost:5000/${addButton}/createNew`, formData)
+    formData.image = imageBinary;
+    // const data = JSON.stringify(formData);
+    // console.log(data);
+    Axios.post(`http://localhost:5000/${addButton}/createNew`, data)
       .then((response) => {
         console.log(response);
       })
@@ -100,14 +102,30 @@ export default function AdminHome() {
       });
   };
 
-  const encodeImageFileAsURL = (e) => {
-    console.log(e);
-    var file = e.files[0];
+  // const encodeImageFileAsURL = (e) => {
+  //   console.log(e);
+  //   var file = e.files[0];
+  //   var reader = new FileReader();
+  //   reader.onloadend = function () {
+  //     console.log("RESULT", reader.result);
+  //   };
+  //   reader.readAsDataURL(file);
+  // };
+
+  const [file, setFile] = useState();
+  const [imageBinary, setImageBinary] = useState("");
+
+  const saveFile = (e) => {
+    setFile(e.target.files[0]);
+    // setFileName(e.target.files[0].name);
+    console.log(file);
     var reader = new FileReader();
     reader.onloadend = function () {
       console.log("RESULT", reader.result);
+      setImageBinary(reader.result);
     };
     reader.readAsDataURL(file);
+    // console.log(reader);
   };
 
   return (
@@ -269,18 +287,8 @@ export default function AdminHome() {
                         <input
                           id="selectImage"
                           type="file"
-                          // onChange={(e) => {
-                          //   console.log("hello");
-                          //   console.log(e);
-                          //   var file = e.files[0];
-                          //   var reader = new FileReader();
-                          //   reader.onloadend = function () {
-                          //     console.log("RESULT", reader.result);
-                          //   };
-                          //   reader.readAsDataURL(file);
-                          // }}
-                          accept="image/*"
-                          {...register(`image`)}
+                          onChange={saveFile}
+                          // accept="image/*"
                         />
                       </label>
 

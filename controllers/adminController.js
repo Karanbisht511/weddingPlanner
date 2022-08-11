@@ -25,7 +25,6 @@ exports.Login = async (req, res) => {
       // const match = await bcrypt.compare(password, userInfo.password);
       // console.log(match);
       if (password === userInfo.password) {
-        ``;
         console.log("login successfully");
         return userInfo;
       }
