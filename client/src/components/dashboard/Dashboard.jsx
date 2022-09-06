@@ -172,40 +172,12 @@ export default function Dashboard() {
           {email}
           <br></br>
           <span className="detail">Mobile:</span> {mobile}
-          {/* <br></br>
-        <span className="detail">Pincode:</span>
-        {pincode}
-        <br></br>
-        <span className="detail">Address:</span>
-        {address} */}
         </div>
 
         <Link to="/updateInfo">
           <button className="button">Update</button>
         </Link>
       </div>
-
-      {/* {cardDetails && (
-        <div id="cardDetails">
-          <span className="detail">Groom:</span> {cardDetails.groomName}
-          <br></br>
-          <span className="detail">Bride:</span>
-          {cardDetails.brideName}
-          <br></br>
-          {cardDetails.startDate && cardDetails.endDate ? (
-            <p>
-              {" "}
-              <span className="detail">Date:</span> {cardDetails.startDate} -{" "}
-              {cardDetails.endDate}{" "}
-            </p>
-          ) : (
-            <p>
-              <span className="detail">Date:</span>
-              {cardDetails.eventDate})
-            </p>
-          )}
-        </div>
-      )} */}
 
       <div className="right-container">
         <h1 style={{ textAlign: "center" }}>Arrangements</h1>

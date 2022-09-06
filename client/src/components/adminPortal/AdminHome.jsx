@@ -13,6 +13,7 @@ import ModeEditOutlineIcon from "@mui/icons-material/ModeEditOutline";
 import AddIcon from "@mui/icons-material/Add";
 import SearchIcon from "@mui/icons-material/Search";
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
+import PhotoSizeSelectActualIcon from "@mui/icons-material/PhotoSizeSelectActual";
 
 import { useForm } from "react-hook-form";
 
@@ -20,26 +21,38 @@ import "./AdminHome.css";
 
 export default function AdminHome() {
   const [showAddNew, setShowAddNew] = useState(false);
+  const [showImage, setShowImage] = useState(false);
+  const [img, setImg] = useState();
   const navigate = useNavigate();
 
   const { register, handleSubmit, errors } = useForm();
-  const onSubmit = async (formData) => {
-    console.log(formData);
-    formData.image = imageBinary;
-    // const data = JSON.stringify(formData);
+
+  const onSubmit = async (data) => {
     // console.log(data);
-    Axios.post(`http://localhost:5000/${addButton}/createNew`, data)
-      .then((response) => {
-        console.log(response);
-      })
-      .catch((error) => {
-        console.log(error.message);
-      });
-    document.querySelector("#admin-form").reset();
-    // fetchAllData(addButton);
-    setShowAddNew(false);
-    // window.location.reload();
-    // fetchAllData(addButton);
+    console.log(file);
+
+    const formData = new FormData();
+
+    formData.append("details", JSON.stringify(data));
+    if (!file) {
+      alert("insert image");
+      formData.delete("details");
+      return;
+    } else {
+      formData.append("image", file);
+
+      console.log(formData);
+
+      Axios.post(`http://localhost:5000/${addButton}/createNew`, formData)
+        .then((response) => {
+          console.log(response);
+        })
+        .catch((error) => {
+          console.log(error.message);
+        });
+      document.querySelector("#admin-form").reset();
+      setShowAddNew(false);
+    }
   };
 
   const addHeaderAndFooter = () => {
@@ -74,6 +87,7 @@ export default function AdminHome() {
   };
 
   const [data, setData] = useState();
+  const [details, setDetails] = useState();
   const [addButton, setAddButton] = useState();
 
   const fetchAllData = (path) => {
@@ -82,10 +96,13 @@ export default function AdminHome() {
       .then((response) => {
         console.log(response);
         setData(response.data);
+        setDetails(response.data[0].details);
       })
       .catch((error) => {
         console.log(error);
       });
+
+    console.log(data);
   };
 
   const deleteThis = (item) => {
@@ -102,30 +119,11 @@ export default function AdminHome() {
       });
   };
 
-  // const encodeImageFileAsURL = (e) => {
-  //   console.log(e);
-  //   var file = e.files[0];
-  //   var reader = new FileReader();
-  //   reader.onloadend = function () {
-  //     console.log("RESULT", reader.result);
-  //   };
-  //   reader.readAsDataURL(file);
-  // };
-
   const [file, setFile] = useState();
-  const [imageBinary, setImageBinary] = useState("");
 
-  const saveFile = (e) => {
-    setFile(e.target.files[0]);
-    // setFileName(e.target.files[0].name);
+  const saveFile = (file) => {
     console.log(file);
-    var reader = new FileReader();
-    reader.onloadend = function () {
-      console.log("RESULT", reader.result);
-      setImageBinary(reader.result);
-    };
-    reader.readAsDataURL(file);
-    // console.log(reader);
+    setFile(file);
   };
 
   return (
@@ -217,10 +215,10 @@ export default function AdminHome() {
           <form id="admin-form" onSubmit={handleSubmit(onSubmit)}>
             <div className="table-data">
               <table>
-                {data && (
+                {details && (
                   <tr>
                     <th>SNo.</th>
-                    {Object.keys(data[0]).map((key) => {
+                    {Object.keys(details).map((key) => {
                       if (key !== "__v" && key !== "_id" && key !== "image")
                         return <th>{key.toUpperCase()}</th>;
                     })}
@@ -239,7 +237,7 @@ export default function AdminHome() {
                         }
                       >
                         <td>{index + 1}</td>
-                        {Object.entries(item).map(([key, value]) => {
+                        {Object.entries(item.details).map(([key, value]) => {
                           if (
                             key !== "__v" &&
                             key !== "_id" &&
@@ -250,6 +248,15 @@ export default function AdminHome() {
                         })}
                         <td className="flex-container">
                           <ModeEditOutlineIcon sx={{ color: "blue" }} />
+                          <PhotoSizeSelectActualIcon
+                            onClick={() => {
+                              console.log(item.image);
+
+                              setImg(item.image);
+
+                              setShowImage(!showImage);
+                            }}
+                          />
                           <DeleteIcon
                             onClick={() => {
                               deleteThis(item);
@@ -264,7 +271,7 @@ export default function AdminHome() {
                   <tr className="newData">
                     <td>{data.length + 1}</td>
 
-                    {Object.keys(data[0]).map((key) => {
+                    {Object.keys(data[0].details).map((key) => {
                       if (key !== "__v" && key !== "_id" && key !== "image")
                         return (
                           <td>
@@ -287,7 +294,10 @@ export default function AdminHome() {
                         <input
                           id="selectImage"
                           type="file"
-                          onChange={saveFile}
+                          onChange={(e) => {
+                            console.log(e);
+                            saveFile(e.target.files[0]);
+                          }}
                           // accept="image/*"
                         />
                       </label>
@@ -310,12 +320,24 @@ export default function AdminHome() {
               className="admin-add-button2 blue"
               onClick={() => {
                 setShowAddNew(!showAddNew);
+                setShowImage(false);
               }}
             >
               <AddIcon />
               <button style={{ border: "none" }} className="blue">
                 Add {addButton}
               </button>
+            </div>
+          )}
+
+          {showImage && (
+            <div>
+              {console.log(img)}
+              <img
+                className="adminImages"
+                src={`http://localhost:5000/uploads/${img.filename}`}
+                alt="venue"
+              />{" "}
             </div>
           )}
         </div>

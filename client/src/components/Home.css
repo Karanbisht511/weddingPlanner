@@ -73,6 +73,7 @@ body{
 
 
 .tile{
+  text-align: center;
   /* border: 1px solid black; */
   padding: 15px;
   margin: 10px;
@@ -81,12 +82,12 @@ body{
   box-sizing: border-box;
  /* overflow-wrap: break-word; */
 }
-.tile:hover{
+/* .tile:hover{
 transform: scale(1.05);
-}
+} */
 
 .tile-selected{
-  border: 5px solid blue;
+  border: 1px solid wheat;
 }
 
 

@@ -1,0 +1,19 @@
+
+@media screen and (min-width: 768px){
+
+
+.tileImage{
+    width: 200px;
+    height: 200px;
+    padding: 5px;
+    margin: 5px;
+    border-radius: 10px;
+    border: 2px solid black;
+    transition: all .3s ease-in-out;
+}
+
+.tileImage:hover{
+  transform: scale(1.1);
+}
+
+}

@@ -36,8 +36,11 @@ export default function LoginForm() {
       console.log("receivedData:", receivedData);
       console.log(data);
       addHeaderAndFooter();
-      const PORT=window.location.port;
-      window.location.assign(`http://localhost:${PORT}/`);
+      const PORT = window.location.port;
+      const hostname = window.location.hostname;
+
+      window.location.assign(`http://${hostname}:${PORT}/`);
+
       // navigate("/");
     }
   };

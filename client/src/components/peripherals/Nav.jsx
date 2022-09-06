@@ -57,7 +57,8 @@ export default function Nav() {
             onClick={() => {
               sessionStorage.clear();
               const PORT = window.location.port;
-              window.location.assign(`http://localhost:${PORT}/`);
+              const hostname = window.location.hostname;
+              window.location.assign(`http://${hostname}:${PORT}/`);
             }}
           >
             Logout

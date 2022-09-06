@@ -33,7 +33,10 @@ export default function LoginForm() {
       sessionStorage.setItem("userInformation", JSON.stringify(receivedData));
       addHeaderAndFooter();
       const PORT = window.location.port;
-      window.location.assign(`http://localhost:${PORT}/`);
+      // console.log(window.location);
+      const hostname = window.location.hostname;
+
+      window.location.assign(`http://${hostname}:${PORT}/`);
       // navigate(`/`);
     }
   };

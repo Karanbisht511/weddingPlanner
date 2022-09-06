@@ -5,10 +5,12 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import ModeEditOutlineIcon from "@mui/icons-material/ModeEditOutline";
 import AddIcon from "@mui/icons-material/Add";
 import SearchIcon from "@mui/icons-material/Search";
+import { useNavigate } from "react-router";
 
 import { useForm } from "react-hook-form";
 
 export default function AddGuests() {
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -18,7 +20,7 @@ export default function AddGuests() {
   const [guestList, setGuestList] = useState();
   const [showAddNew, setShowAddNew] = useState(false);
 
-  const onSubmit = async (data) => {
+  const onSubmit = (data) => {
     console.log(data);
     const userId = JSON.parse(
       sessionStorage.getItem("userInformation")
@@ -27,9 +29,11 @@ export default function AddGuests() {
       userId,
       data,
     })
-      .then((response) => {
+      .then(async (response) => {
         console.log(response);
-        window.location.reload();
+        if (response.data == "Guests updated") await getData();
+        await document.querySelector("#guestForm").reset();
+        setShowAddNew(!showAddNew);
       })
       .catch((error) => {
         console.log(error.message);
@@ -45,7 +49,6 @@ export default function AddGuests() {
     })
       .then((response) => {
         console.log(response);
-        window.location.reload();
       })
       .catch((error) => {
         console.log(error.message);
@@ -98,7 +101,7 @@ export default function AddGuests() {
           />
         </div>
       </div>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form id="guestForm" onSubmit={handleSubmit(onSubmit)}>
         <table>
           <tr>
             {/* <th></th> */}
